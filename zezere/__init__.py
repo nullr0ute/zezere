@@ -15,17 +15,17 @@ def run_django_management():
 
 
 EFI_FILE_URL_BASE = (
-    "https://kojipkgs.fedoraproject.org/compose/iot/latest-Fedora-IoT-32/compose/IoT"
+    "https://dl.fedoraproject.org/pub/alt/iot/32/IoT/"
 )
 
 
 EFI_FILES = [
     {
-        "url": EFI_FILE_URL_BASE + "/x86_64/os/isolinux/initrd.img",
+        "url": EFI_FILE_URL_BASE + "/x86_64/os/images/pxeboot/initrd.img",
         "destination": "netboot/x86_64/initrd",
     },
     {
-        "url": EFI_FILE_URL_BASE + "/x86_64/os/isolinux/vmlinuz",
+        "url": EFI_FILE_URL_BASE + "/x86_64/os/images/pxeboot/vmlinuz",
         "destination": "netboot/x86_64/vmlinuz",
     },
     {
