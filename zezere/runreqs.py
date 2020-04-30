@@ -4,34 +4,34 @@ from django.utils.translation import gettext_lazy as _
 from . import models
 
 
-KOJI_ROOT = "https://kojipkgs.fedoraproject.org/compose"
+COMPOSE_ROOT = "https://dl.fedoraproject.org/pub/alt/iot"
 
 AUTO_RUNREQS = {
     "fedora-iot-stable": {
         "type": "ok",
         "next": "fedora-installed",
-        "compose_root": f"{KOJI_ROOT}/iot/latest-Fedora-IoT-32",
+        "compose_root": f"{COMPOSE_ROOT}/32",
         "compose_name": "IoT",
         "clear_parts": True,
         "install_type": "ostree",
         "ostree": {
             "osname": "fedora-iot-stable",
             "remote": "fedora-iot",
-            "repo": "https://kojipkgs.fedoraproject.org/compose/iot/repo/",
+            "repo": "https://ostree.fedoraproject.org/iot/",
             "ref": "fedora/stable/:arch:/iot",
         },
     },
     "fedora-iot-rawhide": {
         "type": "ok",
         "next": "fedora-installed",
-        "compose_root": f"{KOJI_ROOT}/iot/latest-Fedora-IoT-33",
+        "compose_root": f"{COMPOSE_ROOT}/rawhide",
         "compose_name": "IoT",
         "clear_parts": True,
         "install_type": "ostree",
         "ostree": {
             "osname": "fedora-iot-rawhide",
             "remote": "fedora-iot",
-            "repo": "https://kojipkgs.fedoraproject.org/compose/iot/repo/",
+            "repo": "https://ostree.fedoraproject.org/iot/",
             "ref": "fedora/rawhide/:arch:/iot",
         },
     },
@@ -54,8 +54,8 @@ def generate_auto_runreq(sender, instance, **kwargs):
     instance.type = info["type"]
 
     if "compose_root" in info:
-        compose_url = f"{info['compose_root']}/compose/{info['compose_name']}/:arch:/os"
-        instance.kernel_url = f"{compose_url}/isolinux/vmlinuz"
+        compose_url = f"{info['compose_root']}/{info['compose_name']}/:arch:/os"
+        instance.kernel_url = f"{compose_url}/images/pxeboot/vmlinuz"
         instance.kernel_cmd = " ".join(
             [
                 f"inst.repo={compose_url}",
@@ -67,7 +67,7 @@ def generate_auto_runreq(sender, instance, **kwargs):
                 "ip=dhcp",
             ]
         )
-        instance.initrd_url = f"{compose_url}/isolinux/initrd.img"
+        instance.initrd_url = f"{compose_url}/images/pxeboot/initrd.img"
 
     settings = {"clear_parts": info.get("clear_parts"), "raw": info}
 
